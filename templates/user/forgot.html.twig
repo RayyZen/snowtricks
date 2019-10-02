@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SnowTricks - Forgot Password{% endblock %}
+{% set footer = 'position: absolute;bottom: 0;' %}
+
+{% block body %}
+
+	<div class="form-sign col-12 col-sm-8 col-md-6 col-lg-5 col-xl-3 mx-auto ">
+		<h1 class="text-center">Forgot Password</h1>
+		{% for message in app.flashes('danger') %}
+		    <div class="alert alert-danger" role="alert">
+  				{{ message }}
+			</div>
+		{% endfor %}
+		<form method="post">
+	        <label for="inputEmail" class="sr-only">Email</label>
+	        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+	        <button type="submit" class="btn btn-primary col-6 d-block mx-auto mt-3">Send mail</button>
+	    </form>
+
+	</div>
+
+{% endblock %}

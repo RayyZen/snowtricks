@@ -21,6 +21,7 @@
 	    		<label for="input-password" class="d-block text-center">Password</label>
 	    		<input type="password" class="form-control" id="input-password" name="password" required>
 	  		</div>
+	  		<a href="{{ path('app_forgot_password') }}" class="d-block text-center py-2">Forgot Password ?</a>
 	  		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 	  		<button type="submit" class="btn btn-primary col-6 d-block mx-auto">Login</button>
 		</form>
