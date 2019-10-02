@@ -1,0 +1,29 @@
+{% block title %}SnowTricks - Login{% endblock %}
+{% extends "base.html.twig" %}
+{% block body %}
+
+	<div class="form-sign col-12 col-sm-8 col-md-6 col-lg-5 col-xl-3 mx-auto ">
+		<h1 class="text-center">Login</h1>
+		{% if error %}
+        	<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    	{% endif %}
+    	{% for message in app.flashes('success') %}
+		    <div class="alert alert-success" role="alert">
+  				{{ message }}
+			</div>
+		{% endfor %}
+		<form method="post">
+			<div class="form-group">
+	    		<label for="input-username" class="d-block text-center">Username</label>
+	    		<input type="text" value="{{ last_username }}" class="form-control" id="input-username" name="username" required autofocus>
+	  		</div>
+	  		<div class="form-group">
+	    		<label for="input-password" class="d-block text-center">Password</label>
+	    		<input type="password" class="form-control" id="input-password" name="password" required>
+	  		</div>
+	  		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+	  		<button type="submit" class="btn btn-primary col-6 d-block mx-auto">Login</button>
+		</form>
+	</div>
+
+{% endblock %}

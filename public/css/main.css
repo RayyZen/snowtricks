@@ -1,0 +1,31 @@
+/*########            ##########
+#########  Forms Sign  #########
+##########            ########*/
+
+.form-sign {
+	position: absolute;
+  	left: 50%;
+  	top: 30%;
+  	transform: translate(-50%, -30%);
+}
+
+.form-sign form {
+	padding: 15px;
+	background-color: #f4f4f4;
+	border: 1px solid lightgrey;
+	border-radius: 3px;
+}
+
+.form-sign label {
+	display: block;
+	text-align: center;
+}
+
+.form-sign ul {
+	list-style: none;
+	color: #721c24;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	border-radius: .25rem;
+	padding: .75rem 1.25rem;
+}
