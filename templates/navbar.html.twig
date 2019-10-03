@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ path('app_homepage') }}">
+        <img src="{{ asset('img/logo.png') }}" alt="snowtricks-logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-row-reverse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link {% if current_menu is defined and current_menu == 'homepage' %}active{% endif %}" href="{{ path('app_homepage') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if current_menu is defined and current_menu == 'tricks' %}active{% endif %}" href="#">Tricks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if current_menu is defined and current_menu == 'login' %}active{% endif %}" href="{{ path('app_login') }}">Sign in</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if current_menu is defined and current_menu == 'register' %}active{% endif %}" href="{{ path('app_register') }}">Sign up</a>
+            </li>
+        </ul>
+    </div>
+</nav>

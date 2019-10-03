@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500,600,700&display=swap');
+
 *:focus {
     outline: none !important;
     border-color: grey !important;
@@ -8,6 +10,39 @@
     outline: none !important;
     border-color: grey !important;
     box-shadow: none !important;
+}
+
+/*###########      #############
+###########  Navbar  ###########
+#############      ###########*/
+
+.navbar {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	font-family: 'Raleway', sans-serif;
+	font-weight: 600;
+	z-index: 999;
+	box-shadow: 0 0 5px grey;
+}
+
+.navbar a.active {
+	color: #000;
+}
+
+.navbar img {
+	height: 48px;
+}
+
+/*###########      #############
+###########  Footer  ###########
+#############      ###########*/
+
+.footer .copyright {
+	text-align: center;
+	margin: 0;
+	padding: 20px;
+	background-color: #e4e4e4
 }
 
 /*########            ##########
