@@ -1,3 +1,15 @@
+*:focus {
+    outline: none !important;
+    border-color: grey !important;
+    box-shadow: none !important;
+}
+
+*:active {
+    outline: none !important;
+    border-color: grey !important;
+    box-shadow: none !important;
+}
+
 /*########            ##########
 #########  Forms Sign  #########
 ##########            ########*/
@@ -28,4 +40,68 @@
 	border: 1px solid #f5c6cb;
 	border-radius: .25rem;
 	padding: .75rem 1.25rem;
+}
+
+/*###########      #############
+############  Home  ############
+#############      ###########*/
+
+/***** Header *****/
+
+.header {
+	position: relative;
+	height:100vh;
+	background: url('../img/header_bg.jpg') no-repeat center center;
+	background-size: cover;
+}
+
+.header .down-arrow .arrow{
+	cursor: pointer;
+	position: absolute;
+	bottom: 20px;
+	right: 15px;
+	width: 50px;
+}
+
+/***** Tricks area *****/
+
+.tricks .card {
+	padding: 0;
+	margin: 15px 0; 
+}
+
+.tricks .card .thumbnail {
+	height: 150px;
+	background-size: 105%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.tricks .card-body {
+	padding: 10px;
+}
+
+.tricks .card-body .card-title {
+	margin: 0;
+}
+
+.tricks .card-body .card-title a {
+	color: #404040;
+}
+
+.tricks .card-body button {
+	padding: 0 0 3px 0;
+}
+
+.tricks .card-body .fa-pencil-alt {
+	color: #5e5e5e;
+}
+
+.tricks .card-body .fa-trash-alt {
+	color: #f26363;
+}
+
+#btn-loadmore {
+	display: block;
+	margin: 25px auto;
 }
