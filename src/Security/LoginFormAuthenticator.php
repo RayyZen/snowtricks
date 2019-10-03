@@ -71,12 +71,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
         }
 
+        if ($user->getIsActivated() == 0) {
+            throw new CustomUserMessageAuthenticationException('This account is not activated, please check your mails.');
+        }
+
+
+
         return $user;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -85,8 +92,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
+        $username = $request->request->get('username');
+        $entityManager = $this->entityManager;
+        $user = $entityManager->getRepository(User::class)->findOneByUsername($username);
+
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+
+        
     }
 
     protected function getLoginUrl()

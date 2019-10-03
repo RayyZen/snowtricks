@@ -118,4 +118,22 @@ class SecurityController extends AbstractController
 
     }
 
+    /**
+     * @Route("/activate/{token}", name="app_active_account")
+     */
+    public function accountActivation(Request $request, string $token){
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $user = $entityManager->getRepository(User::class)->findOneByActivationToken($token);
+        $user->setActivationToken(null);
+        $user->setIsActivated(1);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Thanks ! You can now login');
+
+        return $this->redirectToRoute('app_login');
+
+    }
+
 }
