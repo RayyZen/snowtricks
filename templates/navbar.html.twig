@@ -11,7 +11,7 @@
                 <a class="nav-link {% if current_menu is defined and current_menu == 'homepage' %}active{% endif %}" href="{{ path('app_homepage') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if current_menu is defined and current_menu == 'tricks' %}active{% endif %}" href="#">Tricks</a>
+                <a class="nav-link {% if current_menu is defined and current_menu == 'tricks' %}active{% endif %}" href="{{ path('tricks.new') }}">Tricks</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if current_menu is defined and current_menu == 'login' %}active{% endif %}" href="{{ path('app_login') }}">Sign in</a>
