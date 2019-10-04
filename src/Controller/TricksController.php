@@ -13,13 +13,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class TricksController extends AbstractController
 {
 
+	/**
+    * @var TricksRepository
+    */
+    private $repository;
+
+    public function __construct(TricksRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
     * @Route("/", name="app_homepage")
     */
 	public function index()
 	{
+
+		$tricks = $this->repository->findAllTricks();
         
         return $this->render('home.html.twig', [
+        	'tricks' => $tricks,
         	'current_menu' => 'homepage'
         ]);
 
@@ -42,7 +55,7 @@ class TricksController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
-           $this->addFlash('message', 'Le post a bien été postée');
+            $this->addFlash('message', 'Le post a bien été postée');
 
             return $this->redirectToRoute('app_homepage');
 
@@ -50,6 +63,7 @@ class TricksController extends AbstractController
 
         return $this->render('tricks/new.html.twig', [
             'trickNewForm' => $form->createView(),
+            'current_menu' => 'tricks'
         ]);
 
     }
