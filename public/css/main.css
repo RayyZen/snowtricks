@@ -173,3 +173,27 @@ body {
 	display: block;
 	margin: 25px auto;
 }
+
+/*###########      #############
+##########  New trick  #########
+#############      ###########*/
+
+/***** Form *****/
+
+form[name="tricks_new"] textarea {
+	min-height: 350px;
+}
+
+/***** Image preview *****/
+
+.preview-thumbnail img {
+	border-radius: 0.5rem;
+
+}
+
+.preview-thumbnail img {
+	padding: .25rem!important;
+	flex: 0 0 100%;
+    max-width: 100%;
+}
+

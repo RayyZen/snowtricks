@@ -5,23 +5,26 @@
 	<div class="container">
 		<div class="content py-5">
 			{{ form_start(trickNewForm) }}
-				<div class="form-group col-12">
+				<div class="col-12">
 					{{ form_row(trickNewForm.name) }}
 				</div>
-				<div class="form-group col-12">
+				<div class="col-12">
 					{{ form_row(trickNewForm.content) }}
 				</div>
-				<div class="form-group col-12 col-md-4 col-lg-3">
+				<div class="col-12 col-md-4 col-lg-3">
 					{{ form_row(trickNewForm.trickGroup) }}
 				</div>
-				<div class="form-group col-12 col-md-4 col-lg-2">
+				<div class="row col-12">
+					<div class="col-12 col-md-4">
+						{{ form_row(trickNewForm.tricksImages.thumbnail) }}
+						<div class="preview-thumbnail"></div>
+					</div>
+				</div>
+				<div class="col-12 col-md-4 col-lg-2 my-3">
 					<input type="submit" class="btn btn-light w-100" value="Add">
 				</div>
 			{{ form_end(trickNewForm) }}
 		</div>
 	</div>
-
-	
-	
 
 {% endblock %}

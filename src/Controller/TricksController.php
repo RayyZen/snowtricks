@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tricks;
+use App\Entity\TricksImages;
 use App\Repository\TricksRepository;
 use App\Form\TricksNewType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,11 +17,11 @@ class TricksController extends AbstractController
 	/**
     * @var TricksRepository
     */
-    private $repository;
+    private $TricksRepository;
 
-    public function __construct(TricksRepository $repository)
+    public function __construct(TricksRepository $TricksRepository)
     {
-        $this->repository = $repository;
+        $this->TricksRepository = $TricksRepository;
     }
 
     /**
@@ -29,7 +30,7 @@ class TricksController extends AbstractController
 	public function index()
 	{
 
-		$tricks = $this->repository->findAllTricks();
+		$tricks = $this->TricksRepository->findAllTricks();
         
         return $this->render('home.html.twig', [
         	'tricks' => $tricks,
@@ -45,27 +46,77 @@ class TricksController extends AbstractController
     {
         
         $trick = new Tricks();
-        $form = $this->createForm(TricksNewType::class, $trick);
-        $form->handleRequest($request);
+        $image = new TricksImages();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $formTrick = $this->createForm(TricksNewType::class, $trick);
+        $formTrick->handleRequest($request);
+
+        if ($formTrick->isSubmitted() && $formTrick->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($trick);
             $entityManager->flush();
 
-            $this->addFlash('message', 'Le post a bien été postée');
+            $tricks_directory = $this->getParameter('tricks_directory');
+
+            $thumbnailFile = $formTrick['tricksImages']['thumbnail']->getData();
+
+            if (isset($thumbnailFile)) {
+
+                try {
+
+                    $filename = uniqid() .'.' .$thumbnailFile->guessExtension();
+                    $thumbnailFile->move($tricks_directory, $filename);
+
+                } catch (FileException $e) {
+
+                }
+
+                $image->setTrick($trick);
+                $image->setFilename($filename);
+                $image->setIsThumbnail(1);
+                $entityManager->persist($image);
+                $entityManager->flush();
+
+            }
+
+            if (isset($aditionalFile)) {
+
+                foreach ($aditionalFile as $file) {
+
+                    try {
+
+                        $filename = uniqid() .'.' .$thumbnailFile->guessExtension();
+                        $thumbnailFile->move($tricks_directory, $filename);
+                        
+                    } catch (Exception $e) {
+                        
+                    }
+
+                    $image->setTrick($trick);
+                    $image->setFilename($filename);
+                    $image->setIsThumbnail(0);
+                    $entityManager->persist($image);
+                    $entityManager->flush();
+
+                }
+
+            }            
+
+            $this->addFlash('succes', 'Your trick has been posted');
 
             return $this->redirectToRoute('app_homepage');
 
-        } 
+        }
 
         return $this->render('tricks/new.html.twig', [
-            'trickNewForm' => $form->createView(),
+            'trickNewForm' => $formTrick->createView(),
             'current_menu' => 'tricks'
         ]);
 
     }
+
+    
 
 }

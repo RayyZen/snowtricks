@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,10 +44,16 @@ class Tricks
      */
     private $TrickGroup;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TricksImages", mappedBy="trick", orphanRemoval=true)
+     */
+    private $tricksImages;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
+        $this->tricksImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,4 +120,36 @@ class Tricks
 
         return $this;
     }
+
+    /**
+     * @return Collection|TricksImages[]
+     */
+    public function getTricksImages(): Collection
+    {
+        return $this->tricksImages;
+    }
+
+    public function addTricksImage(TricksImages $tricksImage): self
+    {
+        if (!$this->tricksImages->contains($tricksImage)) {
+            $this->tricksImages[] = $tricksImage;
+            $tricksImage->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTricksImage(TricksImages $tricksImage): self
+    {
+        if ($this->tricksImages->contains($tricksImage)) {
+            $this->tricksImages->removeElement($tricksImage);
+            // set the owning side to null (unless already changed)
+            if ($tricksImage->getTrick() === $this) {
+                $tricksImage->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -7,9 +7,12 @@ use App\Entity\TricksGroup;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class TricksNewType extends AbstractType
 {
@@ -23,7 +26,7 @@ class TricksNewType extends AbstractType
             ])
             ->add('content', TextareaType::class, [
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ]
             ])
             ->add('trickGroup', EntityType::class, [
@@ -34,6 +37,7 @@ class TricksNewType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            ->add('tricksImages', ImageType::class)
         ;
     }
 
