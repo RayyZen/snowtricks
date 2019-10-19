@@ -20,7 +20,7 @@
 		    				<h5 class="card-title"><a href="">{{ trick.name }}</a></h5>
 						    <div class="icons">
 		  						<a href=""><i class="fad fa-pencil-alt fa-lg"></i></a>
-						    	<button class="btn" data-toggle="modal" data-target="#DeleteModal" data-trickname="Backflip"><i class="fad fa-trash-alt fa-lg"></i></button>
+						    	
 		  					</div>
 		  				</div>
 					</div>
@@ -30,22 +30,6 @@
 		<button class="btn btn-light col-10 col-md-3" id="btn-loadmore"><i class="fad fa-spinner fa-lg"></i> Load more</button>
 	</div>
 
-	<!-- Modal for confirmation -->
-	<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  	<div class="modal-dialog modal-dialog-centered" role="document">
-	    	<div class="modal-content">
-		      	<div class="modal-header">
-		        	<h5 class="modal-title" id="ModalTitle"></h5>
-		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          		<span aria-hidden="true">&times;</span>
-		        	</button>
-		      	</div>
-	      		<div class="modal-body">
-	      			<p>Are you sure you want to delete this trick ?</p>
-	        		<button class="btn btn-danger col-12">Confirm</button>
-	      		</div>
-	    	</div>
-	  	</div>
-	</div>
+	
 
 {% endblock %}

@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\TricksImages;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,20 +14,35 @@ class ImageType extends AbstractType
     {
         $builder
             ->add('thumbnail', FileType::class, [
-                'required' => false,
                 'mapped' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '4096k',
                         'maxSizeMessage' => 'L\'image est trop volumineuse (Max 4Mo)',
                         'mimeTypes' => ['image/jpeg', 'image/jpg', 'image/png'],
-                        'mimeTypesMessage' => 'Veuillez vérifier le format de l\'image (seulement JPEG, JPG et PNG acceptés)',
+                        'mimeTypesMessage' => 'Only .JPEG, .JPG or .PNG are allowed',
                     ])
                 ],
                 'attr' => [
                     'class' => 'thumbnail-upload'
                 ],
                 'label' => 'Thumbnail',
+            ])
+            ->add('additional', FileType::class, [
+                'mapped' => false,
+                'multiple' => true,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '4096k',
+                        'maxSizeMessage' => 'L\'image est trop volumineuse (Max 4Mo)',
+                        'mimeTypes' => ['image/jpeg', 'image/jpg', 'image/png'],
+                        'mimeTypesMessage' => 'Only .JPEG, .JPG or .PNG are allowed)',
+                    ])
+                ],
+                'attr' => [
+                    'class' => 'aditional-upload'
+                ],
+                'label' => 'Additional Images',
             ])
         ;
     }

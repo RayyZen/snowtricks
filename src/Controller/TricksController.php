@@ -6,6 +6,7 @@ use App\Entity\Tricks;
 use App\Entity\TricksImages;
 use App\Repository\TricksRepository;
 use App\Form\TricksNewType;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,9 +20,10 @@ class TricksController extends AbstractController
     */
     private $TricksRepository;
 
-    public function __construct(TricksRepository $TricksRepository)
+    public function __construct(TricksRepository $TricksRepository, ObjectManager $entityManager)
     {
         $this->TricksRepository = $TricksRepository;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -46,12 +48,13 @@ class TricksController extends AbstractController
     {
         
         $trick = new Tricks();
-        $image = new TricksImages();
+        $image1 = new TricksImages();
+        
 
         $formTrick = $this->createForm(TricksNewType::class, $trick);
         $formTrick->handleRequest($request);
 
-        if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+        if ($formTrick->isSubmitted()) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -61,6 +64,7 @@ class TricksController extends AbstractController
             $tricks_directory = $this->getParameter('tricks_directory');
 
             $thumbnailFile = $formTrick['tricksImages']['thumbnail']->getData();
+            $additionalFile = $formTrick['tricksImages']['additional']->getData();
 
             if (isset($thumbnailFile)) {
 
@@ -73,38 +77,41 @@ class TricksController extends AbstractController
 
                 }
 
-                $image->setTrick($trick);
-                $image->setFilename($filename);
-                $image->setIsThumbnail(1);
-                $entityManager->persist($image);
+                $image1->setTrick($trick);
+                $image1->setFilename($filename);
+                $image1->setIsThumbnail(1);
+                $entityManager->persist($image1);
                 $entityManager->flush();
 
             }
 
-            if (isset($aditionalFile)) {
+            if (isset($additionalFile)) {
 
-                foreach ($aditionalFile as $file) {
+                foreach ($additionalFile as $file) {
+
+                    $image2 = new TricksImages();
 
                     try {
 
-                        $filename = uniqid() .'.' .$thumbnailFile->guessExtension();
-                        $thumbnailFile->move($tricks_directory, $filename);
+                        $filename = uniqid() .'.' .$file->guessExtension();
+                        $file->move($tricks_directory, $filename);
                         
                     } catch (Exception $e) {
                         
                     }
 
-                    $image->setTrick($trick);
-                    $image->setFilename($filename);
-                    $image->setIsThumbnail(0);
-                    $entityManager->persist($image);
-                    $entityManager->flush();
+                    $image2->setTrick($trick);
+                    $image2->setFilename($filename);
+                    $image2->setIsThumbnail(0);
+                    $entityManager->persist($image2);
 
                 }
 
+                $entityManager->flush();
+
             }            
 
-            $this->addFlash('succes', 'Your trick has been posted');
+            $this->addFlash('success', 'Your trick has been posted');
 
             return $this->redirectToRoute('app_homepage');
 
