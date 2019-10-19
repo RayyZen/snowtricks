@@ -124,6 +124,18 @@ class TricksController extends AbstractController
 
     }
 
-    
+    /**
+     * @Route("/tricks/detail/{id}", name="tricks.delete", methods="DELETE")
+     * @param Tricks $trick
+     */
+    public function trickDelete(Tricks $trick, Request $request)
+    {
+        if ($this->isCsrfTokenValid('delete' .$trick->getId(), $request->get('_token'))) {
+            $this->entityManager->remove($trick);
+            $this->entityManager->flush();
+            $this->addFlash('message', 'The trick has been removed');
+            return $this->redirectToRoute('app_homepage');
+        }
+    }
 
 }
