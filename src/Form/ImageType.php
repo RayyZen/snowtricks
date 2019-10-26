@@ -40,7 +40,7 @@ class ImageType extends AbstractType
                     ])
                 ],
                 'attr' => [
-                    'class' => 'aditional-upload'
+                    'class' => 'additional-upload'
                 ],
                 'label' => 'Additional Images',
             ])
