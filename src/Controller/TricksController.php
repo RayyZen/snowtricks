@@ -43,14 +43,34 @@ class TricksController extends AbstractController
 	{
 
 		$tricks = $this->TricksRepository->findAllTricks();
-        $thumbnail = $this->TricksImagesRepository->findThumbnailById(1);
         
         return $this->render('home.html.twig', [
         	'tricks' => $tricks,
-        	'current_menu' => 'homepage'
+        	'current_menu' => 'homepage'   
         ]);
 
 	}
+
+    /**
+     * @Route("tricks/details/{id}-{slug}", name="tricks.details", requirements={"slug": "[a-z0-9\-]*"})
+     * @return Response
+     */
+    public function detailsTrick($slug, $id)
+    {
+
+        $trick = $this->TricksRepository->find($id);
+        $thumbnail = $this->TricksImagesRepository->findTrickThumbnail($trick->getId());
+        $images = $this->TricksImagesRepository->findAllTrickImages($trick->getId());
+
+        //dd($thumbnail);
+
+        return $this->render('tricks/details.html.twig', [
+            'trick' => $trick,
+            'thumbnail' => $thumbnail,
+            'images' => $images
+        ]);
+
+    }
 
 	/**
     * @Route("/new-trick", name="tricks.new")
@@ -120,9 +140,11 @@ class TricksController extends AbstractController
 
                 $entityManager->flush();
 
-            }            
+            }
 
-            $this->addFlash('success', 'Your trick has been posted');
+            $linkToTrick = "{{ path('tricks.details', {id: " .$trick->getId() .", slug: " .$trick->getSlug() ."}) }}";
+
+            $this->addFlash('trick-success','Your trick has been added to our list.');
 
             return $this->redirectToRoute('app_homepage');
 
@@ -139,11 +161,11 @@ class TricksController extends AbstractController
      * @Route("/tricks/details/{id}", name="tricks.delete", methods="DELETE")
      * @param Tricks $trick
      */
-    public function trickDelete(Tricks $trick, Request $request)
+    public function deleteTrick(Tricks $trick, Request $request)
     {
         if ($this->isCsrfTokenValid('delete' .$trick->getId(), $request->get('_token'))) {
 
-            $images = $this->TricksImagesRepository->findAllImagesById($trick->getId());
+            $images = $this->TricksImagesRepository->findAllTrickImages($trick->getId());
             $tricks_directory = $this->getParameter('tricks_directory');
 
             foreach ($images as $image) {
@@ -157,7 +179,7 @@ class TricksController extends AbstractController
             $this->entityManager->remove($trick);
             $this->entityManager->flush();
 
-            $this->addFlash('message', 'The trick has been removed');
+            $this->addFlash('trick-delete', 'Your trick has been removed');
             return $this->redirectToRoute('app_homepage');
         }
     }

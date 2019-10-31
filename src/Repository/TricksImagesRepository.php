@@ -19,6 +19,28 @@ class TricksImagesRepository extends ServiceEntityRepository
         parent::__construct($registry, TricksImages::class);
     }
 
+    public function findAllTrickImages($id)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.trick = :id')
+            ->setParameter('id', $id)
+            ->orderBy('i.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findTrickThumbnail($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.isThumbnail = 1')
+            ->andWhere('t.trick = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult()
+        ;
+    }
+
     // /**
     //  * @return TricksImages[] Returns an array of TricksImages objects
     //  */

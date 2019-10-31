@@ -1,0 +1,27 @@
+{% block title %}Snowtricks - {{ trick.name }}{% endblock %}
+{% extends "base.html.twig" %}
+{% block body %}
+
+	<div class="container">
+		<div class="content trick-details py-5">
+			<div class="trick-header" style="background-image: url({{ asset('img/tricks/') ~ thumbnail.filename }})">
+				<div class="blur"></div>
+				<h1>{{ trick.name }}</h1>
+			</div>
+			<div class="medias">
+				<div class="images">
+					{% for image in images %}
+						<img src="{{ asset('img/tricks/') ~ image.filename }}" alt="{{ trick.name }}">
+					{% endfor %}
+				</div>
+			</div>
+			<p class="description">{{ trick.content|nl2br }}</p>
+			<div class="infos col-11 mx-auto col-md-6 d-flex justify-content-between">
+				<span><b class="badge">Group: </b>{{ trick.trickGroup.name }}</span>
+				<span><b class="badge">Created: </b>{{ trick.createdAt|date("m/d/Y") }}</span>
+				<span><b class="badge">Last update: </b>{{ trick.updatedAt|date("m/d/Y") }}</span>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

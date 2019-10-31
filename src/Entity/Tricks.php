@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TricksRepository")
@@ -48,6 +49,12 @@ class Tricks
      * @ORM\OneToMany(targetEntity="App\Entity\TricksImages", mappedBy="trick", orphanRemoval=true)
      */
     private $tricksImages;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -150,6 +157,11 @@ class Tricks
         }
 
         return $this;
+    }
+
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
 }
