@@ -114,6 +114,14 @@ class TricksController extends AbstractController
                 $entityManager->persist($image1);
                 $entityManager->flush();
 
+            } else {
+
+                $image1->setTrick($trick);
+                $image1->setFilename('default.png');
+                $image1->setIsThumbnail(1);
+                $entityManager->persist($image1);
+                $entityManager->flush();
+
             }
 
             if (isset($additionalFile)) {
@@ -141,8 +149,6 @@ class TricksController extends AbstractController
                 $entityManager->flush();
 
             }
-
-            $linkToTrick = "{{ path('tricks.details', {id: " .$trick->getId() .", slug: " .$trick->getSlug() ."}) }}";
 
             $this->addFlash('trick-success','Your trick has been added to our list.');
 
@@ -172,7 +178,10 @@ class TricksController extends AbstractController
                
                 $filesystem = new Filesystem();
                 $filename = $image->getFilename();
-                $filesystem->remove($tricks_directory .'/' .$filename);
+
+                if ($filename != 'default.png') {
+                     $filesystem->remove($tricks_directory .'/' .$filename);
+                }
 
             }
 

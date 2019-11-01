@@ -36,7 +36,9 @@
 			{% for trick in tricks %}
 				<div class="trick col-6 col-md-4 col-lg-3">
 					<div class="card">
-						<div class="thumbnail" style="background-image: url({{ asset('img/tricks/default.png') }})"></div>
+						{% for thumbnail in trick.tricksImages %}
+							<div class="thumbnail" style="background-image: url({{ asset('img/tricks/') ~ thumbnail.filename }})"></div>
+						{% endfor %}
 						<div class="card-body d-flex justify-content-around">
 		    				<h5 class="card-title"><a href="{{ path('tricks.details', {id: trick.id, slug: trick.slug}) }}">{{ trick.name }}</a></h5>
 						    <div class="icons">

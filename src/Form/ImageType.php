@@ -27,6 +27,7 @@ class ImageType extends AbstractType
                     'class' => 'thumbnail-upload'
                 ],
                 'label' => 'Thumbnail',
+                'required' => false
             ])
             ->add('additional', FileType::class, [
                 'mapped' => false,
@@ -43,6 +44,7 @@ class ImageType extends AbstractType
                     'class' => 'additional-upload'
                 ],
                 'label' => 'Additional Images',
+                'required' => false
             ])
         ;
     }

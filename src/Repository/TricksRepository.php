@@ -21,6 +21,9 @@ class TricksRepository extends ServiceEntityRepository
 
     public function findAllTricks(){
         return $this->createQueryBuilder('t')
+            ->leftJoin('t.tricksImages', 'i')
+            ->addSelect('i')
+            ->andWhere('i.isThumbnail = 1')
             ->orderBy('t.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
