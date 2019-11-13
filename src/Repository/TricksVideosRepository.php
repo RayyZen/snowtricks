@@ -19,6 +19,17 @@ class TricksVideosRepository extends ServiceEntityRepository
         parent::__construct($registry, TricksVideos::class);
     }
 
+    public function findAllTrickVideos($id)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.trick = :id')
+            ->setParameter('id', $id)
+            ->orderBy('i.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return TricksVideos[] Returns an array of TricksVideos objects
     //  */
