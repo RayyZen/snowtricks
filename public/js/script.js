@@ -39,6 +39,12 @@ $(document).ready(function() {
         imagesPreview(this, "div.preview-additional");
     });
 
+    $(".btn-add-video").click(function() {
+        $(".videos-field").append("<tr><td><button type='button' class='btn btn-del-video'><i class='fad fa-trash fa-lg'></i></button></td><td><input type='text' name='add-video[]' required='required' class='form-control form-control' placeholder='<iframe>...</iframe>' /></td></tr>");
+    });
 
+    $(".btn-del-video").click(function() {
+        $(this).closest ('tr').remove ();
+    });
 	
 });

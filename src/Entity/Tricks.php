@@ -56,11 +56,17 @@ class Tricks
      */
     private $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TricksVideos", mappedBy="trick", orphanRemoval=true)
+     */
+    private $tricksVideos;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
         $this->tricksImages = new ArrayCollection();
+        $this->tricksVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +168,37 @@ class Tricks
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * @return Collection|TricksVideos[]
+     */
+    public function getTricksVideos(): Collection
+    {
+        return $this->tricksVideos;
+    }
+
+    public function addTricksVideo(TricksVideos $tricksVideo): self
+    {
+        if (!$this->tricksVideos->contains($tricksVideo)) {
+            $this->tricksVideos[] = $tricksVideo;
+            $tricksVideo->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTricksVideo(TricksVideos $tricksVideo): self
+    {
+        if ($this->tricksVideos->contains($tricksVideo)) {
+            $this->tricksVideos->removeElement($tricksVideo);
+            // set the owning side to null (unless already changed)
+            if ($tricksVideo->getTrick() === $this) {
+                $tricksVideo->setTrick(null);
+            }
+        }
+
+        return $this;
     }
 
 }

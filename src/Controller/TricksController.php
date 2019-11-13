@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Tricks;
 use App\Entity\TricksImages;
+use App\Entity\TricksVideos;
 use App\Repository\TricksRepository;
 use App\Repository\TricksImagesRepository;
+use App\Repository\TricksVideosRepository;
 use App\Form\TricksNewType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +16,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 class TricksController extends AbstractController
 {
 
@@ -28,11 +29,13 @@ class TricksController extends AbstractController
     */
     private $TricksImagesRepository;
 
-    public function __construct(TricksRepository $TricksRepository, TricksImagesRepository $TricksImagesRepository, ObjectManager $entityManager)
+    public function __construct(TricksRepository $TricksRepository, TricksImagesRepository $TricksImagesRepository, TricksVideosRepository $TricksVideosRepository, ObjectManager $entityManager)
     {
+        
         $this->TricksRepository = $TricksRepository;
         $this->TricksImagesRepository = $TricksImagesRepository;
-        $this->entityManager = $entityManager;        
+        $this->TricksVideosRepository = $TricksVideosRepository;
+        $this->entityManager = $entityManager;
 
     }
 
@@ -61,13 +64,13 @@ class TricksController extends AbstractController
         $trick = $this->TricksRepository->find($id);
         $thumbnail = $this->TricksImagesRepository->findTrickThumbnail($trick->getId());
         $images = $this->TricksImagesRepository->findAllTrickImages($trick->getId());
-
-        //dd($thumbnail);
+        $videos = $this->TricksVideosRepository->findAllTrickVideos($trick->getId());
 
         return $this->render('tricks/details.html.twig', [
             'trick' => $trick,
             'thumbnail' => $thumbnail,
-            'images' => $images
+            'images' => $images,    
+            'videos' => $videos
         ]);
 
     }
@@ -149,6 +152,27 @@ class TricksController extends AbstractController
                 $entityManager->flush();
 
             }
+
+            $videosUrl = $request->request->get('add-video');
+
+            if (isset($videosUrl)) {
+
+                foreach ($videosUrl as $videoUrl) {
+                    
+                    $video = new TricksVideos();
+
+                    preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $videoUrl, $url);
+                
+                    $video->setTrick($trick);
+                    $video->setUrl($url[1]);
+                    $entityManager->persist($video);
+                    $entityManager->flush();
+
+                }
+
+            }
+
+            dd($videosUrl);
 
             $this->addFlash('trick-success','Your trick has been added to our list.');
 

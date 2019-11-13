@@ -269,14 +269,15 @@ form[name="tricks_new"] textarea {
 	overflow-x: auto;
 }
 
-.trick-details .medias .images {
+.trick-details .medias .images, .trick-details .medias .videos {
 	display: flex;
 	padding-bottom: 10px;
 	margin-top: 15px;
 }
 
-.trick-details .medias .images img {
+.trick-details .medias .images img, .trick-details .medias .videos iframe {
 	height: 150px;
+	width: auto;
 	margin: 0 5px;
 }
 
