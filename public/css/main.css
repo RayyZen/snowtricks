@@ -218,7 +218,6 @@ form[name="tricks_new"] textarea {
 
 .preview-thumbnail img, .preview-additional img {
 	border-radius: 0.5rem;
-
 }
 
 .preview-thumbnail img {
@@ -283,4 +282,22 @@ form[name="tricks_new"] textarea {
 
 .trick-details .description {
 	margin-top: 50px;
+}
+
+/*########            ##########
+#########  Trick edit  #########
+##########            ########*/
+
+.pre-medias .card {
+	border: none;
+	margin: 0 0.5rem;
+}
+
+.pre-medias .card .card-body {
+	padding: 1rem 0;
+}
+
+.pre-medias img, .pre-medias iframe {
+	height: 120px;
+	width: auto;
 }

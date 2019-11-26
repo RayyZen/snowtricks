@@ -172,8 +172,6 @@ class TricksController extends AbstractController
 
             }
 
-            dd($videosUrl);
-
             $this->addFlash('trick-success','Your trick has been added to our list.');
 
             return $this->redirectToRoute('app_homepage');
@@ -183,6 +181,119 @@ class TricksController extends AbstractController
         return $this->render('tricks/new.html.twig', [
             'trickNewForm' => $formTrick->createView(),
             'current_menu' => 'tricks'
+        ]);
+
+    }
+
+    /**
+     * @Route("/tricks/edit/{id}", name="tricks.edit", methods="GET|POST")
+     * @param Tricks $trick
+     */
+    public function editTrick(Tricks $trick, Request $request)
+    {
+
+        $editForm = $this->createForm(TricksNewType::class, $trick);
+        $editForm->handleRequest($request);
+
+        $thumbnail = $this->TricksImagesRepository->findTrickThumbnail($trick->getId());
+        $images = $this->TricksImagesRepository->findAllTrickImages($trick->getId());
+        $videos = $this->TricksVideosRepository->findAllTrickVideos($trick->getId());
+
+        if ($editForm->isSubmitted()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($trick);
+            $this->entityManager->flush();
+
+            $tricks_directory = $this->getParameter('tricks_directory');
+
+            $thumbnailFile = $editForm['tricksImages']['thumbnail']->getData();
+            $additionalFile = $editForm['tricksImages']['additional']->getData();
+
+            if (isset($thumbnailFile)) {
+
+                $thumbnail = $this->TricksImagesRepository->findTrickThumbnail($trick->getId());
+                $filename = $thumbnail->getFilename();
+                $filesystem = new Filesystem();
+                $filesystem->remove($tricks_directory .'/' .$filename);
+
+                $this->entityManager->remove($thumbnail);
+
+                $image1 = new TricksImages();
+
+                try {
+
+                    $filename = uniqid() .'.' .$thumbnailFile->guessExtension();
+                    $thumbnailFile->move($tricks_directory, $filename);
+
+                } catch (FileException $e) {
+
+                }
+
+                $image1->setTrick($trick);
+                $image1->setFilename($filename);
+                $image1->setIsThumbnail(1);
+                $entityManager->persist($image1);
+                $entityManager->flush();
+
+            }
+
+            if (isset($additionalFile)) {
+
+                foreach ($additionalFile as $file) {
+
+                    $image2 = new TricksImages();
+
+                    try {
+
+                        $filename = uniqid() .'.' .$file->guessExtension();
+                        $file->move($tricks_directory, $filename);
+                        
+                    } catch (Exception $e) {
+                        
+                    }
+
+                    $image2->setTrick($trick);
+                    $image2->setFilename($filename);
+                    $image2->setIsThumbnail(0);
+                    $entityManager->persist($image2);
+
+                }
+
+                $entityManager->flush();
+
+            }
+
+            $videosUrl = $request->request->get('add-video');
+
+            if (isset($videosUrl) && !empty($videosUrl[0])) {
+
+                foreach ($videosUrl as $videoUrl) {
+                    
+                    $video = new TricksVideos();
+
+                    preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $videoUrl, $url);
+                
+                    $video->setTrick($trick);
+                    $video->setUrl($url[1]);
+                    $entityManager->persist($video);
+                    $entityManager->flush();
+
+                }
+
+            }
+
+            $this->addFlash('trick-success', 'L\'annonce a bien été modifiée');
+            return $this->redirectToRoute('app_homepage');
+
+        }
+
+        return $this->render('tricks/edit.html.twig', [
+            'trick' => $trick,
+            'thumbnail' => $thumbnail,
+            'images' => $images,    
+            'videos' => $videos,
+            'editForm' => $editForm->createView()
         ]);
 
     }
@@ -204,7 +315,7 @@ class TricksController extends AbstractController
                 $filename = $image->getFilename();
 
                 if ($filename != 'default.png') {
-                     $filesystem->remove($tricks_directory .'/' .$filename);
+                    $filesystem->remove($tricks_directory .'/' .$filename);
                 }
 
             }
@@ -215,6 +326,44 @@ class TricksController extends AbstractController
             $this->addFlash('trick-delete', 'Your trick has been removed');
             return $this->redirectToRoute('app_homepage');
         }
+    }
+
+    /**
+     * @Route("/tricks/image/{id}", name="trick.image.delete")
+     * @param TricksImages $trickImage
+     */
+    public function deleteTrickImage(TricksImages $trickImage, Request $request)
+    {
+
+            $image = $this->TricksImagesRepository->findImage($trickImage->getId());
+            $tricks_directory = $this->getParameter('tricks_directory');
+
+            $filesystem = new Filesystem();
+            $filename = $image->getFilename();
+
+            if ($filename != 'default.png') {
+                $filesystem->remove($tricks_directory .'/' .$filename);
+            }
+
+            $this->entityManager->remove($trickImage);
+            $this->entityManager->flush();
+
+            return new Response();
+        
+    }
+
+    /**
+     * @Route("/tricks/video/{id}", name="trick.video.delete")
+     * @param TricksVideos $trickVideo
+     */
+    public function deleteTrickVideo(TricksVideos $trickVideo, Request $request)
+    {
+
+            $this->entityManager->remove($trickVideo);
+            $this->entityManager->flush();
+
+            return new Response();
+        
     }
 
 }

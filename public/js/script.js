@@ -40,11 +40,36 @@ $(document).ready(function() {
     });
 
     $(".btn-add-video").click(function() {
-        $(".videos-field").append("<tr><td><button type='button' class='btn btn-del-video'><i class='fad fa-trash fa-lg'></i></button></td><td><input type='text' name='add-video[]' required='required' class='form-control form-control' placeholder='<iframe>...</iframe>' /></td></tr>");
+        $(".videos-field").append("<tr><td><button type='button' class='btn btn-del-video text-danger'><i class='fad fa-trash fa-lg'></i></button></td><td><input type='text' name='add-video[]' required='required' class='form-control form-control' placeholder='<iframe>...</iframe>' /></td></tr>");
+    });
+    
+    $(".videos-field").delegate(".btn-del-video", "click", function () {
+        $(this).closest('tr').remove();
     });
 
-    $(".btn-del-video").click(function() {
-        $(this).closest ('tr').remove ();
+    $(".btn-del-image").click(function () {
+        var path = $(this).attr('data-path');
+        var img_id = $(this).attr('data-id');
+        $.ajax({
+            type: 'POST',
+            url: path,
+            success: function(data) {
+                $("[data-card-id=img-" + img_id + "]").fadeOut();
+            }
+        });
     });
-	
+
+    
+    $(".btn-del-video").click(function () {
+        var path = $(this).attr('data-path');
+        var vid_id = $(this).attr('data-id');
+        $.ajax({
+            type: 'POST',
+            url: path,
+            success: function(data) {
+                $("[data-card-id=vid-" + vid_id + "]").fadeOut();
+            }
+        });
+    });
+
 });

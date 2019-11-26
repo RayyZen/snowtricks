@@ -29,6 +29,17 @@ class TricksImagesRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    
+    public function findImage($id)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.id = :id')
+            ->setParameter('id', $id)
+            ->orderBy('i.id', 'ASC')
+            ->getQuery()
+            ->getSingleResult()
+        ;
+    }
 
     public function findTrickThumbnail($id)
     {

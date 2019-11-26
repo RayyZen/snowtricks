@@ -14,6 +14,12 @@
 						<img src="{{ asset('img/tricks/') ~ image.filename }}" alt="{{ trick.name }}">
 					{% endfor %}
 				</div>
+				<div class="videos">
+					{% for video in videos %}
+						<iframe src="{{ video.url }}" frameborder="0"></iframe>
+					{% endfor %}
+
+				</div>
 			</div>
 			<p class="description">{{ trick.content|nl2br }}</p>
 			<div class="infos col-11 mx-auto col-md-6 d-flex justify-content-between">
