@@ -9,6 +9,11 @@ $(document).ready(function() {
 	    }, 1000);
 	});
 
+    $('.btn-show-medias').click(function(){
+        $(this).text($(this).text() == 'Hide medias' ? 'Show medias' : 'Hide medias');
+        $('.medias').toggleClass('d-none');
+    })
+
 	var imagesPreview = function(input, placeToInsertImagePreview) {
 
         if (input.files) {

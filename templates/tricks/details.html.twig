@@ -18,7 +18,8 @@
 					</div>
 				{% endif %}
 			</div>
-			<div class="medias">
+			<button class="col-8 btn btn-primary d-block d-sm-none mx-auto my-3 btn-show-medias">See medias</button>
+			<div class="medias d-none d-md-block">
 				<div class="images">
 					{% for image in images %}
 						<img src="{{ asset('img/tricks/') ~ image.filename }}" alt="{{ trick.name }}">

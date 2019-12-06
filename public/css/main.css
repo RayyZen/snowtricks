@@ -264,7 +264,8 @@ form[name="tricks_new"] textarea {
 	background-color: #fff;
 	padding: 5px;
 	border-radius: 3px;
-	z-index: 999;
+	box-shadow: 0 0 3px grey;
+	z-index: 998;
 }
 
 .trick-details .medias {
