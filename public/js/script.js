@@ -1,8 +1,5 @@
 $(document).ready(function() {
 
-	var str = "123";
-	var res = str.replace("123", "456");
-
 	setInterval(function(){
 		$(".arrow").effect("bounce", { direction:"down", times:2 }, 1000);
 	}, 4000);
@@ -71,5 +68,7 @@ $(document).ready(function() {
             }
         });
     });
+
+    
 
 });

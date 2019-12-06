@@ -28,6 +28,38 @@
 				<span><b class="badge">Last update: </b>{{ trick.updatedAt|date("m/d/Y") }}</span>
 			</div>
 		</div>
+		<hr>
+		<div class="comments">
+			<h1>Comments</h1>
+			<h4>Leave a comment</h4>
+			{% if app.user %}
+				<div class="form-comment">
+					{{ form_start(commentForm) }}
+						{{ form_row(commentForm.content) }}
+						<input type="submit" class="btn btn-primary" value="send">
+					{{ form_end(commentForm) }}
+				</div>
+			{% else %}
+				<p>You need to <a href="{{ path('app_login') }}">Sign in</a>  to post comment, or <a href="{{ path('app_register') }}">Sign up</a></p>
+			{% endif %}
+			{% for comment in comments %}
+				<div class="dropdown-divider"></div>
+				<div class="comment">
+  					<h5>{{ comment.user.username }}</h5>
+					<p class="card-text pl-3">{{ comment.content }}</p>
+					<div class="text-right">
+						<p class="text-muted">{{ comment.createdAt|date("F jS \\a\\t g:ia") }}</p>
+						{% if app.user == comment.user %}
+							<form method="POST" action="{{ path('comments_delete', { id: trick.id, slug: trick.slug, cid: comment.id }) }}" onsubmit="return confirm('Are you sure you want to delete your comment ?')">
+								<input type="hidden" name="_method" value="DELETE">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+								<button class="btn text-danger p-1">delete</button>
+							</form>
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 
 {% endblock %}

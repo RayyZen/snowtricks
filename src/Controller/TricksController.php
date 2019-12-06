@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Entity\Tricks;
 use App\Entity\TricksImages;
 use App\Entity\TricksVideos;
+use App\Entity\Comments;
 use App\Repository\TricksRepository;
 use App\Repository\TricksImagesRepository;
 use App\Repository\TricksVideosRepository;
+use App\Repository\CommentsRepository;
 use App\Form\TricksNewType;
+use App\Form\CommentsType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -16,25 +19,17 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 class TricksController extends AbstractController
 {
 
-	/**
-    * @var TricksRepository
-    */
-    private $TricksRepository;
-
-    /**
-    * @var TricksImagesRepository
-    */
-    private $TricksImagesRepository;
-
-    public function __construct(TricksRepository $TricksRepository, TricksImagesRepository $TricksImagesRepository, TricksVideosRepository $TricksVideosRepository, ObjectManager $entityManager)
+    public function __construct(TricksRepository $TricksRepository, TricksImagesRepository $TricksImagesRepository, TricksVideosRepository $TricksVideosRepository, CommentsRepository $CommentsRepository, ObjectManager $entityManager)
     {
         
         $this->TricksRepository = $TricksRepository;
         $this->TricksImagesRepository = $TricksImagesRepository;
         $this->TricksVideosRepository = $TricksVideosRepository;
+        $this->CommentsRepository = $CommentsRepository;
         $this->entityManager = $entityManager;
 
     }
@@ -46,6 +41,7 @@ class TricksController extends AbstractController
 	{
 
 		$tricks = $this->TricksRepository->findAllTricks();
+
         
         return $this->render('home.html.twig', [
         	'tricks' => $tricks,
@@ -55,10 +51,10 @@ class TricksController extends AbstractController
 	}
 
     /**
-     * @Route("tricks/details/{id}-{slug}", name="tricks.details", requirements={"slug": "[a-z0-9\-]*"})
+     * @Route("/tricks/details/{id}-{slug}", name="tricks.details", requirements={"slug": "[a-z0-9\-]*"})
      * @return Response
      */
-    public function detailsTrick($slug, $id)
+    public function detailsTrick(Request $request, $id)
     {
 
         $trick = $this->TricksRepository->find($id);
@@ -66,11 +62,21 @@ class TricksController extends AbstractController
         $images = $this->TricksImagesRepository->findAllTrickImages($trick->getId());
         $videos = $this->TricksVideosRepository->findAllTrickVideos($trick->getId());
 
+        $comment = new Comments();
+        $form = $this->createForm(CommentsType::class, $comment, [
+            'action' => $this->generateUrl('comments_new',array('id' => $trick->getId())),
+        ]);
+        $form->handleRequest($request);
+
+        $comments = $this->CommentsRepository->findBy(['trick' => $id]);
+
         return $this->render('tricks/details.html.twig', [
             'trick' => $trick,
             'thumbnail' => $thumbnail,
             'images' => $images,    
-            'videos' => $videos
+            'videos' => $videos,
+            'commentForm' => $form->createView(),
+            'comments' => $comments
         ]);
 
     }
@@ -83,7 +89,6 @@ class TricksController extends AbstractController
         
         $trick = new Tricks();
         $image1 = new TricksImages();
-        
 
         $formTrick = $this->createForm(TricksNewType::class, $trick);
         $formTrick->handleRequest($request);
