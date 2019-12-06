@@ -7,6 +7,16 @@
 			<div class="trick-header" style="background-image: url({{ asset('img/tricks/') ~ thumbnail.filename }})">
 				<div class="blur"></div>
 				<h1>{{ trick.name }}</h1>
+				{% if app.user %}
+					<div class="actions">
+						<a href="{{ path('tricks.edit', {id: trick.id}) }}"><i class="fad fa-pencil-alt fa-lg"></i></a>
+						<form method="POST" action="{{ path('tricks.delete', {id: trick.id}) }}" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this trick ?')">
+							<input type="hidden" name="_method" value="DELETE">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+							<button class="btn p-0 text-danger"><i class="fad fa-trash-alt fa-lg"></i></button>
+						</form>
+					</div>
+				{% endif %}
 			</div>
 			<div class="medias">
 				<div class="images">

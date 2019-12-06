@@ -254,6 +254,19 @@ form[name="tricks_new"] textarea {
 	z-index: 999;
 }
 
+.trick-details .trick-header .actions {
+	display: flex;
+	justify-content: space-between;
+	width: 70px;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	background-color: #fff;
+	padding: 5px;
+	border-radius: 3px;
+	z-index: 999;
+}
+
 .trick-details .medias {
 	display: flex;
 	overflow-x: auto;
