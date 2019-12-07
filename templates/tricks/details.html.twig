@@ -75,8 +75,8 @@
 		        </div>
 			{% endfor %}
 			{% for comment in comments %}
-				<div class="dropdown-divider"></div>
 				<div class="comment">
+					<div class="dropdown-divider"></div>
   					<h5>{{ comment.user.username }}</h5>
 					<p class="card-text pl-3">{{ comment.content }}</p>
 					<div class="text-right">
@@ -92,7 +92,14 @@
 					</div>
 				</div>
 			{% endfor %}
+			<button class="btn btn-light col-10 col-md-3" id="btn-loadmore" data-type="+">Show more comments</button>
 		</div>
 	</div>
 
+{% endblock %}
+{% block javascripts2 %}
+	<script>
+		var showMore = new ShowMoreShowLess;
+		showMore.run('.comment', '#btn-loadmore', 'Show more comments', 'Show less comments');
+	</script>
 {% endblock %}

@@ -56,11 +56,13 @@
 				</div>
 			{% endfor %}
 		</div>
-		<button class="btn btn-light col-10 col-md-3" id="btn-loadmore"><i class="fad fa-spinner fa-lg"></i> Load more</button>
+		<button class="btn btn-light col-10 col-md-3" id="btn-loadmore" data-type="+"><i class="fad fa-spinner fa-lg"></i> Load more</button>
 	</div>
 
-
-
-	
-
+{% endblock %}
+{% block javascripts2 %}
+	<script>
+		var showMore = new ShowMoreShowLess;
+		showMore.run('.trick', '#btn-loadmore', '<i class="fad fa-spinner fa-lg"></i> Load more', '<i class="fad fa-spinner fa-lg"></i> Show less');
+	</script>
 {% endblock %}
