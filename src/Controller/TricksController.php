@@ -68,7 +68,7 @@ class TricksController extends AbstractController
         ]);
         $form->handleRequest($request);
 
-        $comments = $this->CommentsRepository->findBy(['trick' => $id]);
+        $comments = $this->CommentsRepository->findBy(['trick' => $id],['createdAt' => 'DESC']);
 
         return $this->render('tricks/details.html.twig', [
             'trick' => $trick,

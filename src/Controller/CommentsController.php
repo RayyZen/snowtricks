@@ -45,25 +45,38 @@ class CommentsController extends AbstractController
             $entityManager->flush();
         }
 
-        return new Response();
+        $trick_url = explode('-', $request->request->get('trick_id'));
+
+        $this->addFlash('comment-success','Your comment has been posted below the trick.');
+
+        return $this->redirectToRoute('tricks.details', array(
+            'id' => $trick_url[0],
+            'slug' => $trick_url[1],
+            '_fragment' => 'comments'
+        ));
 
     }
 
     /**
-     * @Route("/tricks/{id}-{slug}/comment/delete/{cid}", name="comments_delete", methods={"DELETE"})
+     * @Route("/tricks/comment/delete/{id}", name="comments_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Comments $comment, $id, $slug, $cid): Response
+    public function delete(Request $request, Comments $comment, $id): Response
     {
+
+        $trick_url = explode('-', $request->request->get('trick_id'));
 
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($comment);
             $entityManager->flush();
-
-            return new Response('dd');
-
         }
 
-        return new Response('fail');
+        $this->addFlash('comment-delete','Your comment has been deleted.');
+
+        return $this->redirectToRoute('tricks.details', array(
+            'id' => $trick_url[0],
+            'slug' => $trick_url[1],
+            '_fragment' => 'comments'
+        ));
     }
 }
